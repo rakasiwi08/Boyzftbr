@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabel Poin FT BR — Hitung Point By Boyz</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0f0; font-family: 'Exo 2', sans-serif; min-height: 100vh; padding: 24px 16px; }
+  .wrapper { max-width: 1100px; margin: 0 auto; }
+
+  /* ── TITLE ── */
+  .title-block { text-align: center; margin-bottom: 20px; }
+  .title-block h1 { font-family: 'Rajdhani', sans-serif; font-size: 2rem; color: #FF6B00; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 30px rgba(255,107,0,0.4); }
+  .title-block p { color: #888; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+  /* ── MAIN TABLE ── */
+  .table-wrap { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,107,0,0.3); box-shadow: 0 0 40px rgba(255,107,0,0.1), 0 4px 24px rgba(0,0,0,0.3); }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .banner-cell { background: linear-gradient(90deg,#CC4400,#FF6B00,#CC4400); color:#fff; text-align:center; padding:12px; font-family:'Rajdhani',sans-serif; font-size:1.35rem; font-weight:700; letter-spacing:2px; border-bottom:2px solid rgba(255,255,255,0.15); }
+  .no-banner { background:#111118; color:#FF6B00; text-align:center; font-family:'Rajdhani',sans-serif; font-size:0.9rem; font-weight:700; letter-spacing:1px; border-right:2px solid rgba(255,107,0,0.4); }
+  .map-header { text-align:center; padding:10px 4px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:1px; color:#fff; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .map-bermuda   { background:#0D47A1; border-right:2px solid #1565C0; }
+  .map-purgatory { background:#1B5E20; border-right:2px solid #2E7D32; }
+  .map-allpoint  { background:#4A148C; }
+  .map-juara     { background:#B71C1C; }
+  .col-no-h, .col-nama-h { background:#111118; color:#aaa; text-align:center; padding:10px 4px; font-size:0.78rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .col-no-h  { border-right:2px solid rgba(255,107,0,0.4); }
+  .col-nama-h{ border-right:2px solid rgba(255,107,0,0.3); }
+  .sub-header { text-align:center; padding:7px 4px; font-size:0.72rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; border-bottom:2px solid #FF6B00; }
+  .sub-bermuda   { background:#1565C0; color:#FFD54F; }
+  .sub-purgatory { background:#2E7D32; color:#A5D6A7; }
+  .sub-allpoint  { background:#6A1B9A; color:#CE93D8; border-bottom:2px solid #FF6B00; }
+  .sub-juara     { background:#C62828; color:#FFCDD2; border-bottom:2px solid #FF6B00; }
+  tr.row-even td { background:#ffffff; }
+  tr.row-odd  td { background:#f4f4f4; }
+  td { text-align:center; padding:7px 4px; font-size:0.82rem; color:#111; border:1px solid #ddd; vertical-align:middle; }
+  td.td-no { font-weight:700; color:#FF6B00; font-family:'Rajdhani',sans-serif; font-size:0.9rem; border-right:2px solid rgba(255,107,0,0.3); background:#fff8f3 !important; }
+  td.td-nama { text-align:left; padding-left:10px; font-weight:600; color:#222; border-right:2px solid rgba(255,107,0,0.2); }
+  td.td-point { font-weight:600; color:#333; }
+  td.td-all { font-weight:800; color:#4A148C; font-size:0.9rem; border-left:2px solid rgba(74,20,140,0.3); background:#f3e5f5 !important; }
+  td.td-juara { font-weight:800; font-size:0.95rem; border-left:2px solid rgba(183,28,28,0.3); background:#ffebee !important; }
+  td.td-juara.rank-1 { color:#B8860B; font-size:1.3rem; background:#fff8e1 !important; }
+  td.td-juara.rank-2 { color:#707070; font-size:1.2rem; background:#f5f5f5 !important; }
+  td.td-juara.rank-3 { color:#A0522D; font-size:1.1rem; background:#fbe9e7 !important; }
+  td.td-juara.rank-other { color:#B71C1C; font-size:0.85rem; }
+  td.active-row { background:#FFF3E0 !important; outline:2px solid #FF6B00; }
+
+  [contenteditable="true"] { outline:none; cursor:text; transition:background 0.15s; }
+  [contenteditable="true"]:hover { background:#fff3e0 !important; }
+  [contenteditable="true"]:focus { background:#FFE0B2 !important; box-shadow:inset 0 0 0 2px #FF6B00; border-radius:3px; }
+
+  .col-no { width:42px; } .col-nama { width:160px; } .col-pt { width:90px; } .col-all { width:90px; } .col-juara { width:90px; }
+
+  /* ── BUTTONS ── */
+  .btn-wrap { text-align:center; margin-bottom:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .btn { padding:10px 24px; border:none; border-radius:6px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:transform 0.1s, box-shadow 0.1s; }
+  .btn:hover { transform:translateY(-1px); }
+  .btn-orange { background:linear-gradient(90deg,#CC4400,#FF6B00); color:white; box-shadow:0 4px 16px rgba(255,107,0,0.3); }
+  .btn-blue   { background:linear-gradient(90deg,#1565C0,#1976D2); color:white; box-shadow:0 4px 16px rgba(21,101,192,0.3); }
+
+  /* ── QUICK INPUT PANEL ── */
+  .input-panel {
+    margin-top: 28px;
+    background: #fff;
+    border-radius: 14px;
+    border: 2px solid rgba(255,107,0,0.25);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    padding: 20px 20px 24px;
+  }
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+  }
+  .panel-title {
+    font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700;
+    color: #FF6B00; letter-spacing: 1px;
+  }
+  .panel-status {
+    font-family: 'Rajdhani', sans-serif; font-size: 1rem;
+    background: #FFF3E0; border: 1px solid #FF6B00;
+    border-radius: 20px; padding: 5px 16px; color: #CC4400; font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .panel-status.green { background:#E8F5E9; border-color:#2E7D32; color:#1B5E20; }
+
+  .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .point-section h4 {
+    font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+    margin-bottom: 10px; padding: 6px 12px; border-radius: 6px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .pos-title { background: #0D47A1; color: #FFD54F; }
+  .kill-title { background: #B71C1C; color: #FFCDD2; }
+
+  .point-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pt-btn {
+    min-width: 52px; padding: 10px 6px;
+    border: 2px solid #ddd; border-radius: 8px; background: #f9f9f9;
+    font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.15s; color: #333; text-align: center;
+  }
+  .pt-btn:hover { border-color: #FF6B00; background: #FFF3E0; color: #FF6B00; }
+  .pt-btn.selected { background: #FF6B00; color: white; border-color: #CC4400; transform: scale(1.08); }
+
+  /* Kill point accumulator */
+  .kill-display {
+    font-family: 'Rajdhani', sans-serif; font-size: 2rem; font-weight: 700;
+    color: #B71C1C; text-align: center; margin-bottom: 10px;
+    background: #ffebee; border-radius: 8px; padding: 8px;
+    border: 2px solid #FFCDD2;
+  }
+  .kill-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .kill-add-btn {
+    padding: 8px 18px; border: 2px solid #B71C1C; border-radius: 8px;
+    background: #fff; color: #B71C1C;
+    font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .kill-add-btn:hover { background: #B71C1C; color: white; }
+  .kill-reset-btn {
+    padding: 8px 14px; border: 2px solid #aaa; border-radius: 8px;
+    background: #fff; color: #888;
+    font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .kill-reset-btn:hover { background: #eee; }
+
+  .confirm-btn {
+    margin-top: 18px; width: 100%; padding: 14px;
+    background: linear-gradient(90deg, #1B5E20, #2E7D32);
+    color: white; border: none; border-radius: 10px;
+    font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700;
+    letter-spacing: 2px; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(27,94,32,0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .confirm-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(27,94,32,0.4); }
+  .confirm-btn:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; transform: none; }
+
+  .map-indicator {
+    display: flex; gap: 10px; justify-content: center; margin-bottom: 16px;
+  }
+  .map-ind {
+    padding: 6px 20px; border-radius: 20px; font-family:'Rajdhani',sans-serif;
+    font-size: 0.95rem; font-weight: 700; letter-spacing: 1px;
+    border: 2px solid transparent; color: #999; background: #f0f0f0;
+    transition: all 0.2s;
+  }
+  .map-ind.active-map { color: white; border-color: transparent; }
+  .map-ind.bermuda.active-map { background: #0D47A1; }
+  .map-ind.purgatory.active-map { background: #1B5E20; }
+  .map-ind.done-map { color: white; background: #888; }
+
+  /* ── MODAL ── */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:999; align-items:center; justify-content:center; }
+  .modal-overlay.active { display:flex; }
+  .modal { background:#fff; border-radius:12px; padding:28px; width:90%; max-width:420px; box-shadow:0 8px 40px rgba(0,0,0,0.3); }
+  .modal h3 { font-family:'Rajdhani',sans-serif; font-size:1.3rem; color:#FF6B00; margin-bottom:8px; letter-spacing:1px; }
+  .modal p { font-size:0.8rem; color:#777; margin-bottom:12px; }
+  .modal textarea { width:100%; height:200px; border:2px solid #ddd; border-radius:8px; padding:10px; font-size:0.9rem; font-family:'Exo 2',sans-serif; resize:none; outline:none; transition:border 0.2s; }
+  .modal textarea:focus { border-color:#FF6B00; }
+  .modal-btns { display:flex; gap:10px; margin-top:14px; justify-content:flex-end; }
+  .modal-btns button { padding:8px 22px; border:none; border-radius:6px; font-family:'Rajdhani',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; letter-spacing:1px; }
+  .btn-apply { background:#FF6B00; color:white; }
+  .btn-cancel { background:#eee; color:#555; }
+
+  .legend { margin-top:14px; text-align:center; color:#555; font-size:0.75rem; letter-spacing:0.5px; }
+  .legend span { color:#FF6B00; font-weight:700; }
+
+
+  /* ── VOICE ── */
+  .voice-wrap { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .mic-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border: none; border-radius: 30px;
+    background: linear-gradient(90deg, #880E4F, #C2185B);
+    color: white; font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(194,24,91,0.35);
+    transition: all 0.2s;
+  }
+  .mic-btn.listening {
+    background: linear-gradient(90deg, #B71C1C, #E53935);
+    animation: pulse 1s infinite;
+  }
+  .mic-btn:hover { transform: translateY(-1px); }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(229,57,53,0.5); }
+    70%  { box-shadow: 0 0 0 10px rgba(229,57,53,0); }
+    100% { box-shadow: 0 0 0 0 rgba(229,57,53,0); }
+  }
+  .voice-status {
+    font-size: 0.82rem; color: #888; font-style: italic;
+    flex: 1; min-width: 120px;
+  }
+  .voice-status.active { color: #C2185B; font-weight: 700; font-style: normal; }
+  .voice-target {
+    display: flex; gap: 8px;
+  }
+  .voice-target button {
+    padding: 7px 14px; border-radius: 20px; border: 2px solid #ddd;
+    background: #f9f9f9; color: #555; font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.15s;
+  }
+  .voice-target button.active-target {
+    border-color: #C2185B; background: #FCE4EC; color: #C2185B;
+  }
+
+  @media print {
+    body { background:white; padding:0; }
+    .table-wrap { box-shadow:none; border:1px solid #ccc; }
+    .title-block h1 { color:#CC4400; text-shadow:none; }
+    .no-print { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="title-block">
+    <h1>🏆 Tabel Poin — Fast Tour BR 🏆</h1>
+    <p>Free Fire Custom Room Tournament</p>
+  </div>
+
+  <div class="btn-wrap no-print">
+    <button class="btn btn-blue" onclick="openPasteModal()">📋 Tempel Nama Pemain</button>
+    <button class="btn btn-orange" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+
+  <!-- MAIN TABLE -->
+  <div class="table-wrap">
+    <table>
+      <colgroup>
+        <col class="col-no"><col class="col-nama">
+        <col class="col-pt"><col class="col-pt">
+        <col class="col-pt"><col class="col-pt">
+        <col class="col-all"><col class="col-juara">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="no-banner" rowspan="3">NO</th>
+          <th class="banner-cell" colspan="7">✦ HITUNG POINT — BY BOYZ ✦</th>
+        </tr>
+        <tr>
+          <th class="col-nama-h" rowspan="2">NAMA PEMAIN</th>
+          <th class="map-header map-bermuda" colspan="2">🗺 BERMUDA</th>
+          <th class="map-header map-purgatory" colspan="2">🗺 PURGATORY</th>
+          <th class="map-header map-allpoint">ALL<br>POINT</th>
+          <th class="map-header map-juara">🏆 JUARA</th>
+        </tr>
+        <tr>
+          <th class="sub-header sub-bermuda">Pos Point</th>
+          <th class="sub-header sub-bermuda">Kill Point</th>
+          <th class="sub-header sub-purgatory">Pos Point</th>
+          <th class="sub-header sub-purgatory">Kill Point</th>
+          <th class="sub-header sub-allpoint"></th>
+          <th class="sub-header sub-juara"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- QUICK INPUT PANEL -->
+  <div class="input-panel no-print">
+    <div class="panel-header">
+      <div class="panel-title">⚡ Input Cepat Point</div>
+      <div class="map-indicator">
+        <div class="map-ind bermuda active-map" id="indBermuda">🗺 Bermuda</div>
+        <div class="map-ind purgatory" id="indPurgatory">🗺 Purgatory</div>
+      </div>
+      <div class="panel-status" id="panelStatus">Pemain 1 dari 13</div>
+    </div>
+
+    <div class="panel-grid">
+      <!-- POS POINT -->
+      <div class="point-section">
+        <h4 class="pos-title">🏁 Point Posisi</h4>
+        <div class="point-btns" id="posBtns"></div>
+      </div>
+
+      <!-- KILL POINT -->
+      <div class="point-section">
+        <h4 class="kill-title">💀 Kill Point</h4>
+        <div class="kill-display" id="killDisplay">0</div>
+        <div class="kill-btns">
+          <button class="kill-add-btn" onclick="addKill(1)">+1</button>
+          <button class="kill-add-btn" onclick="addKill(2)">+2</button>
+          <button class="kill-add-btn" onclick="addKill(3)">+3</button>
+          <button class="kill-add-btn" onclick="addKill(4)">+4</button>
+          <button class="kill-add-btn" onclick="addKill(5)">+5</button>
+          <button class="kill-reset-btn" onclick="resetKill()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="confirm-btn" id="confirmBtn" onclick="confirmEntry()">
+      ✅ Konfirmasi & Lanjut ke Pemain Berikutnya
+    </button>
+
+    <!-- Voice Input -->
+    <div class="voice-wrap">
+      <button class="mic-btn" id="micBtn" onclick="toggleVoice()">
+        🎤 Mulai Bicara
+      </button>
+      <div class="voice-target">
+        <button id="targetPos" class="active-target" onclick="setVoiceTarget('pos')">🏁 Pos Point</button>
+        <button id="targetKill" onclick="setVoiceTarget('kill')">💀 Kill Point</button>
+      </div>
+      <div class="voice-status" id="voiceStatus">Tekan 🎤 lalu ucapkan angka</div>
+    </div>
+  </div>
+
+  <div class="legend no-print" style="margin-top:12px;">
+    <span>All Point</span> = otomatis dijumlah &nbsp;|&nbsp;
+    <span>Juara</span> = otomatis ranking &nbsp;|&nbsp; 🥇🥈🥉 = Top 3
+  </div>
+
+  <!-- PASTE MODAL -->
+  <div class="modal-overlay" id="pasteModal">
+    <div class="modal">
+      <h3>📋 Tempel Nama Pemain</h3>
+      <p>Salin daftar nama pemain (1 nama per baris), lalu tempel di bawah. Maksimal 18 nama.</p>
+      <textarea id="pasteArea" placeholder="Contoh:&#10;Tim A&#10;Tim B&#10;Tim C&#10;..."></textarea>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closePasteModal()">Batal</button>
+        <button class="btn-apply" onclick="applyNames()">✅ Terapkan</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = 18;
+  const POS_VALUES = [18, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+  const tbody = document.getElementById('tableBody');
+
+  // State
+  let currentPlayer = 0; // 0-indexed
+  let currentMap = 'bermuda'; // 'bermuda' | 'purgatory'
+  let selectedPos = null;
+  let killCount = 0;
+  let usedPosBermuda = new Set();
+  let usedPosPurgatory = new Set();
+
+  function getUsedSet() {
+    return currentMap === 'bermuda' ? usedPosBermuda : usedPosPurgatory;
+  }
+
+  // Build main table rows
+  for (let i = 1; i <= TOTAL; i++) {
+    const tr = document.createElement('tr');
+    tr.className = i % 2 === 1 ? 'row-odd' : 'row-even';
+    tr.dataset.idx = i - 1;
+    tr.innerHTML = `
+      <td class="td-no">${i}</td>
+      <td class="td-nama" contenteditable="true">${i}. Nama</td>
+      <td class="td-point" data-col="bp">0</td>
+      <td class="td-point" data-col="bk">0</td>
+      <td class="td-point" data-col="pp">0</td>
+      <td class="td-point" data-col="pk">0</td>
+      <td class="td-all" data-col="all">0</td>
+      <td class="td-juara" data-col="juara">—</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  // Build pos point buttons
+  const posBtns = document.getElementById('posBtns');
+  POS_VALUES.forEach((v, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'pt-btn';
+    btn.innerText = v;
+    btn.dataset.val = v;
+    btn.dataset.idx = i;
+    btn.onclick = () => selectPos(btn, v);
+    posBtns.appendChild(btn);
+  });
+
+  function selectPos(btn, val) {
+    if (getUsedSet().has(val) && val !== 0) return; // 0 can be shared
+    document.querySelectorAll('.pt-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedPos = val;
+  }
+
+  function addKill(n) {
+    killCount += n;
+    document.getElementById('killDisplay').innerText = killCount;
+  }
+
+  function resetKill() {
+    killCount = 0;
+    document.getElementById('killDisplay').innerText = 0;
+  }
+
+  function getRows() {
+    return Array.from(tbody.querySelectorAll('tr'));
+  }
+
+  function updatePosButtons() {
+    const used = getUsedSet();
+    document.querySelectorAll('.pt-btn').forEach(btn => {
+      const v = parseInt(btn.dataset.val);
+      const isUsed = used.has(v) && v !== 0;
+      btn.disabled = isUsed;
+      btn.style.opacity = isUsed ? '0.3' : '1';
+      btn.style.cursor = isUsed ? 'not-allowed' : 'pointer';
+      btn.style.textDecoration = isUsed ? 'line-through' : 'none';
+    });
+  }
+
+  function highlightCurrentRow() {
+    getRows().forEach((tr, i) => {
+      const cells = tr.querySelectorAll('td');
+      cells.forEach(td => td.classList.remove('active-row'));
+      if (i === currentPlayer) {
+        cells.forEach(td => td.classList.add('active-row'));
+        tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  function updateStatus() {
+    const st = document.getElementById('panelStatus');
+    const mapLabel = currentMap === 'bermuda' ? 'Bermuda' : 'Purgatory';
+
+    if (currentPlayer >= TOTAL) {
+      st.innerText = '✅ Semua selesai!';
+      st.classList.add('green');
+      document.getElementById('confirmBtn').disabled = true;
+      getRows().forEach(tr => tr.querySelectorAll('td').forEach(td => td.classList.remove('active-row')));
+      return;
+    }
+
+    const rows = getRows();
+    const name = rows[currentPlayer]?.querySelector('.td-nama')?.innerText || `Pemain ${currentPlayer + 1}`;
+    st.innerText = `${mapLabel} — ${name}`;
+    st.classList.toggle('green', currentMap === 'purgatory');
+
+    document.getElementById('indBermuda').classList.toggle('active-map', currentMap === 'bermuda');
+    document.getElementById('indBermuda').classList.toggle('done-map', currentMap !== 'bermuda');
+    document.getElementById('indPurgatory').classList.toggle('active-map', currentMap === 'purgatory');
+    document.getElementById('indPurgatory').classList.remove('done-map');
+
+    highlightCurrentRow();
+  }
+
+  function confirmEntry() {
+    if (selectedPos === null) { alert('Pilih dulu Point Posisi!'); return; }
+
+    const rows = getRows();
+    const tr = rows[currentPlayer];
+    if (!tr) return;
+
+    if (currentMap === 'bermuda') {
+      tr.querySelector('[data-col="bp"]').innerText = selectedPos;
+      tr.querySelector('[data-col="bk"]').innerText = killCount;
+    } else {
+      tr.querySelector('[data-col="pp"]').innerText = selectedPos;
+      tr.querySelector('[data-col="pk"]').innerText = killCount;
+    }
+
+    calcAllPoint(tr);
+    calcJuara();
+
+    // Mark pos as used (0 is shareable)
+    if (selectedPos !== 0) getUsedSet().add(selectedPos);
+
+    // Reset controls
+    document.querySelectorAll('.pt-btn').forEach(b => b.classList.remove('selected'));
+    selectedPos = null;
+    resetKill();
+
+    // Advance
+    currentPlayer++;
+
+    // After all players in bermuda → switch to purgatory
+    if (currentPlayer >= TOTAL && currentMap === 'bermuda') {
+      currentMap = 'purgatory';
+      currentPlayer = 0;
+    }
+
+    updatePosButtons();
+    updateStatus();
+  }
+
+  // ── CALC ──
+  function getVal(cell) {
+    const n = parseFloat(cell.innerText.replace(/[^0-9.\-]/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+
+  function calcAllPoint(tr) {
+    const bp = getVal(tr.querySelector('[data-col="bp"]'));
+    const bk = getVal(tr.querySelector('[data-col="bk"]'));
+    const pp = getVal(tr.querySelector('[data-col="pp"]'));
+    const pk = getVal(tr.querySelector('[data-col="pk"]'));
+    const total = bp + bk + pp + pk;
+    tr.querySelector('[data-col="all"]').innerText = total;
+    return total;
+  }
+
+  function calcJuara() {
+    const rows = getRows();
+    const scores = rows.map(tr => ({ tr, total: parseFloat(tr.querySelector('[data-col="all"]').innerText) || 0 }));
+    const sorted = [...scores].sort((a, b) => b.total - a.total);
+    sorted.forEach(({ tr }) => tbody.appendChild(tr));
+    sorted.forEach(({ tr }, idx) => {
+      const rank = idx + 1;
+      tr.querySelector('.td-no').innerText = rank;
+      tr.className = rank % 2 === 1 ? 'row-odd' : 'row-even';
+      const cell = tr.querySelector('[data-col="juara"]');
+      cell.className = 'td-juara';
+      if (rank === 1)      { cell.innerText = '🥇'; cell.classList.add('rank-1'); }
+      else if (rank === 2) { cell.innerText = '🥈'; cell.classList.add('rank-2'); }
+      else if (rank === 3) { cell.innerText = '🥉'; cell.classList.add('rank-3'); }
+      else                 { cell.innerText = '#' + rank; cell.classList.add('rank-other'); }
+    });
+  }
+
+  function recalcAll() {
+    tbody.querySelectorAll('tr').forEach(tr => calcAllPoint(tr));
+    calcJuara();
+  }
+
+  // Manual edit on point cells still works
+  tbody.addEventListener('blur', e => {
+    const cell = e.target;
+    const col = cell.dataset.col;
+    if (!col || col === 'all' || col === 'juara') return;
+    calcAllPoint(cell.closest('tr'));
+    calcJuara();
+  }, true);
+
+  tbody.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
+  });
+
+  tbody.addEventListener('focus', e => {
+    const cell = e.target;
+    if (cell.contentEditable === 'true' && cell.dataset.col) {
+      setTimeout(() => {
+        const range = document.createRange();
+        range.selectNodeContents(cell);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }, 0);
+    }
+  }, true);
+
+  // ── PASTE MODAL ──
+  function openPasteModal() {
+    document.getElementById('pasteModal').classList.add('active');
+    setTimeout(() => document.getElementById('pasteArea').focus(), 100);
+  }
+  function closePasteModal() {
+    document.getElementById('pasteModal').classList.remove('active');
+    document.getElementById('pasteArea').value = '';
+  }
+  function applyNames() {
+    const raw = document.getElementById('pasteArea').value;
+    const names = raw.split('\n').map(n => n.trim()).filter(n => n.length > 0);
+    const rows = getRows();
+    names.forEach((name, i) => {
+      if (i < rows.length) rows[i].querySelector('.td-nama').innerText = name;
+    });
+    closePasteModal();
+    updateStatus();
+  }
+  document.getElementById('pasteModal').addEventListener('click', function(e) {
+    if (e.target === this) closePasteModal();
+  });
+
+
+  // ── VOICE INPUT ──
+  let recognition = null;
+  let isListening = false;
+  let voiceTarget = 'pos'; // 'pos' | 'kill'
+
+  const wordToNum = {
+    'nol':0,'kosong':0,'zero':0,
+    'satu':1,'one':1,
+    'dua':2,'two':2,
+    'tiga':3,'three':3,
+    'empat':4,'four':4,
+    'lima':5,'five':5,
+    'enam':6,'six':6,
+    'tujuh':7,'seven':7,
+    'delapan':8,'eight':8,
+    'sembilan':9,'nine':9,
+    'sepuluh':10,'ten':10,
+    'sebelas':11,'eleven':11,
+    'dua belas':12,'twelve':12,
+    'tiga belas':13,'thirteen':13,
+    'empat belas':14,'fourteen':14,
+    'lima belas':15,'fifteen':15,
+    'enam belas':16,'sixteen':16,
+    'tujuh belas':17,'seventeen':17,
+    'delapan belas':18,'eighteen':18,
+  };
+
+  function parseVoiceNumber(text) {
+    const lower = text.toLowerCase().trim();
+    // Try direct number
+    const direct = parseInt(lower);
+    if (!isNaN(direct)) return direct;
+    // Try word
+    for (const [word, num] of Object.entries(wordToNum)) {
+      if (lower.includes(word)) return num;
+    }
+    return null;
+  }
+
+  function setVoiceTarget(t) {
+    voiceTarget = t;
+    document.getElementById('targetPos').classList.toggle('active-target', t === 'pos');
+    document.getElementById('targetKill').classList.toggle('active-target', t === 'kill');
+  }
+
+  function applyVoiceNumber(num) {
+    if (voiceTarget === 'pos') {
+      // Find matching pos button
+      const btns = document.querySelectorAll('.pt-btn');
+      let found = false;
+      btns.forEach(btn => {
+        if (parseInt(btn.dataset.val) === num && !btn.disabled) {
+          selectPos(btn, num);
+          found = true;
+          document.getElementById('voiceStatus').textContent = '✅ Pos Point: ' + num;
+        }
+      });
+      if (!found) document.getElementById('voiceStatus').textContent = '⚠️ "' + num + '" sudah dipakai atau tidak valid';
+    } else {
+      // Kill point: add the number
+      killCount += num;
+      document.getElementById('killDisplay').innerText = killCount;
+      document.getElementById('voiceStatus').textContent = '✅ Kill Point +' + num + ' = ' + killCount;
+    }
+  }
+
+  function toggleVoice() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Browser kamu tidak support voice. Coba pakai Chrome!');
+      return;
+    }
+    if (isListening) {
+      stopVoice();
+    } else {
+      startVoice();
+    }
+  }
+
+  function startVoice() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = 'id-ID';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      isListening = true;
+      const btn = document.getElementById('micBtn');
+      btn.classList.add('listening');
+      btn.textContent = '🔴 Mendengarkan...';
+      document.getElementById('voiceStatus').className = 'voice-status active';
+      document.getElementById('voiceStatus').textContent = 'Sedang mendengarkan...';
+    };
+
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      document.getElementById('voiceStatus').textContent = '🗣 "' + transcript + '"';
+      const num = parseVoiceNumber(transcript);
+      if (num !== null) {
+        applyVoiceNumber(num);
+      } else {
+        document.getElementById('voiceStatus').textContent = '❓ Tidak dikenali: "' + transcript + '"';
+      }
+      stopVoice();
+    };
+
+    recognition.onerror = (e) => {
+      document.getElementById('voiceStatus').textContent = '❌ Error: ' + e.error;
+      stopVoice();
+    };
+
+    recognition.onend = () => { stopVoice(); };
+
+    recognition.start();
+  }
+
+  function stopVoice() {
+    isListening = false;
+    if (recognition) { try { recognition.stop(); } catch(e){} }
+    const btn = document.getElementById('micBtn');
+    btn.classList.remove('listening');
+    btn.textContent = '🎤 Mulai Bicara';
+    document.getElementById('voiceStatus').className = 'voice-status';
+  }
+
+  // Init
+  recalcAll();
+  updateStatus();
+  updatePosButtons();
+</script>
+</body>
+</html>
